@@ -18,7 +18,7 @@ Route::get('/', function () {
     return 'we are in files';
     // return view('welcome');
 });
-
+// put the dynamic urls in the end of routes uri (/posts/create) goes to any uri that starts with /posts/{any}
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create/', [PostController::class, 'create'])->name('posts.create');
 Route::post('/posts',[PostController::class, 'store'])->name('posts.store');
