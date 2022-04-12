@@ -20,7 +20,7 @@
                                 {{ session('status') }} <!-- display the value of session key status -->
                             </div>
                         @endif
-                        <form action="/posts" method="post">
+                        <form action="/posts" method="{{route('posts.store')}}">
                             @csrf <!-- This is a security feature to prevent Cross-Site Request Forgery -->
                             <div class="form-group">
                                 <label for="">Post Title</label>
