@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController; // <-- this is the controller same as require
 /*
@@ -18,15 +19,7 @@ Route::get('/', function () {
     // return view('welcome');
 });
 
-Route::get('/test',[TestController::class, 'test']);
-    // $name = 'Gbr';
-    // $articales = ['Laravel', 'PHP', 'Javascript'];
-    // return view('test' , [
-    //     'name' => $name,
-    //     'articles' => $articales
-    // ]);
-// });
-
-Route::get('/hello', function () {
-    return 'hello';
-});
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/create/', [PostController::class, 'create'])->name('posts.create');
+Route::post('/posts',[PostController::class, 'store'])->name('posts.store');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
