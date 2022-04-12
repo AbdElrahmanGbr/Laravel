@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latest Posts</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">    
-    <style>body{font-size: 1.5rem; font-weight: 500;}</style>
-</head>
-<body>
-    <h1 class="text-center">DashBoard For Posts</h1>
+@extends('layouts.app')
+@section('title') Latest posts @endsection
+@section('content')
+<h1 class="text-center">DashBoard For Posts</h1>
     <div class="text-center">
         <a href="{{ route('posts.create') }}" class="mt-4 btn btn-success">Create Post</a>
         <!-- <a href="/posts/create" class="mt-4 btn btn-success">Create Post</a> -->
-<div class="container">
     <div class="table-responsive">
     <table class="table mt-4 align-middle table-bordered border-primary">
         <thead class="table-dark">
@@ -43,8 +34,4 @@
       </table>
       </div>
       </div>
-      </div>
-
-
-</body>
-</html>
+     @endsection
