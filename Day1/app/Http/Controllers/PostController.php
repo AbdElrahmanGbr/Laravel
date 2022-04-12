@@ -29,9 +29,10 @@ class PostController extends Controller
         return 'we are in store';
     }
 
-    public function show($post)
+    public function show()
     {
         //redirect to /posts
+        // dd($post);
         return view('posts.show');
     }
 }
