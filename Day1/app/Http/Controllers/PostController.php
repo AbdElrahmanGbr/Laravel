@@ -13,6 +13,7 @@ class PostController extends Controller
             ['id' => 2, 'title' => 'second post', 'posted_by' => 'Ahmed', 'created_at' => '2022-04-12'],
             ['id' => 3, 'title' => 'third post', 'posted_by' => 'Mohammed', 'created_at' => '2022-04-12'],
         ];
+        // dd($posts); // this is the debug function (global helper method stops the excution of the code and displays the data)
         return view('posts.index',[
             'allPosts' => $posts, // this is the key passing it to view (index.blade.php)
         ]);
@@ -30,6 +31,7 @@ class PostController extends Controller
 
     public function show($post)
     {
+        //redirect to /posts
         return view('posts.show');
     }
 }

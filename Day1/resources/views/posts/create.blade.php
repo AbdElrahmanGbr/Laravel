@@ -13,15 +13,15 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Create Post') }}</div>
+                    <div class="card-header">Create Post</div>
                     <div class="card-body">
-                        @if (session('status'))
+                         @if (session('status')) <!-- if session has a key status -->
                             <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
+                                {{ session('status') }} <!-- display the value of session key status -->
                             </div>
                         @endif
-                        <form action="/post" method="post">
-                            @csrf
+                        <form action="/posts" method="post">
+                            @csrf <!-- This is a security feature to prevent Cross-Site Request Forgery -->
                             <div class="form-group">
                                 <label for="">Post Title</label>
                                 <input type="text" name="title" class="form-control">
@@ -42,7 +42,7 @@
                                 <input type="date" name="published_at" class="form-control">
                             </div>
                             
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary m-2">Submit</button>
                         </form>
                         
                     </div>
