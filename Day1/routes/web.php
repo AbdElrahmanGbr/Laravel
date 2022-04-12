@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TestController; // <-- this is the controller same as require
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +14,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return 'we are in files';
+    // return view('welcome');
+});
+
+Route::get('/test',[TestController::class, 'test']);
+    // $name = 'Gbr';
+    // $articales = ['Laravel', 'PHP', 'Javascript'];
+    // return view('test' , [
+    //     'name' => $name,
+    //     'articles' => $articales
+    // ]);
+// });
+
+Route::get('/hello', function () {
+    return 'hello';
 });
