@@ -13,9 +13,9 @@ class PostController extends Controller
     {
         $posts = Post::all();
         $posts = Post::paginate(5);
-        return view('posts.index',[
-            'allPosts' => $posts, // this is the key passing it to view (index.blade.php)
-        ]);
+        $comments = \App\Models\Comment::with('commentable')->get();
+      return view('posts.index',['allPosts'=>$posts, 'comments'=>$comments ]);
+
     }
 
     public function create()
@@ -60,17 +60,28 @@ class PostController extends Controller
 
     public function show($post)
     {
-        //select * from posts where id = 1
+        //redirect to /posts
+        // dd($post);
+        $posts = Post::all();
+        $comments = \App\Models\Comment::with('commentable')->get();
         $dbPost = Post::findOrFail($post);
+        return view('posts.show',[
+            'post' => $dbPost,
+            'allPosts'=>$posts,
+            'comments'=>$comments,
+        ]);
+    }
+    // {
+        //select * from posts where id = 1
         //second approach to find the post
         // $dbPost = Post::where('id',$post)->first();
         // Post::where('title','first post')->first();
-
         // dd($dbPost);
-        return view('posts.show',[
-            'post' => $dbPost,
-        ]);
-    }
+        // return view('posts.show',[
+        //     'post' => $dbPost,
+        // ]);
+
+    // }
     public function update(Request $request, $post)
     {
         $post = Post::findOrFail($post);
@@ -82,8 +93,8 @@ class PostController extends Controller
     public function destroy($post)
     {
         $post = Post::find($post);
-        $post -> delete();
         $post -> Comments() -> delete();
+        $post -> delete();
         return to_route('posts.index');
     }
 
