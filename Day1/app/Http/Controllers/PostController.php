@@ -28,11 +28,24 @@ class PostController extends Controller
     {
         return 'we are in store';
     }
+    public function edit($post)
+    {
+        return view('posts.edit',[
+            'post' => $post,
+        ]);
+    }
 
-    public function show()
+    public function show($post)
     {
         //redirect to /posts
         // dd($post);
-        return view('posts.show');
+        $post1 = explode(', ', $post);
+        return view('posts.show',[
+            'post' => $post1,
+        ]);
+
     }
+
+
+
 }

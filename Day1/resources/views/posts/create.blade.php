@@ -30,7 +30,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="">Created At</label>
+                                <label for="">Published At</label>
                                 <input type="date" name="published_at" class="form-control">
                             </div>
                             
