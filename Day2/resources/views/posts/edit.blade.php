@@ -12,27 +12,35 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    
-                    <form action="/posts/{{$post['id']}}" method="post">
+                    <form action="{{route('posts.update',['post'=>$post->id])}}" method="post">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label for="">Post Title</label>
+                            <label for="">{{$post->title}}</label>
                             <input type="text" name="title" class="form-control" value="{{$post['title']}}">
                         </div>
 
                         <div class="form-group">
-                            <label for="">Post Body</label>
+                            <label for="">{{$post->body}}</label>
                             <textarea name="body" id="" cols="30" rows="10" class="form-control">{{$post->body}}</textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="">Published by</label>
-                            <input type="text" name="published_by" class="form-control">
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                            <label for="">{{$post->published_by}}</label>
+                            <select name="published_by" id="" class="form-control">
+                                <!-- <option value="">Select Author</option> -->
+                                @foreach($users as $user)
+                                <option value="{{$user->id}}" {{$post->published_by == $user->id ? 'selected' : ''}}>{{$user->name}}</option>
+                                @endforeach
+                            </div>
+                            <!-- <label for="">Published At</label>
+                            <input type="date" name="published_at" class="form-control"> -->
+                            
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary m-2" value="Submit">
+                                <!-- <button type="submit" class="btn btn-primary m-2">Submit</button> -->
+                            </div>
+                        </form>
                     
                 </div>
             </div>

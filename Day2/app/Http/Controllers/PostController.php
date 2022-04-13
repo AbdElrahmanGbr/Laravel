@@ -50,8 +50,11 @@ class PostController extends Controller
 
     public function edit($post)
     {
+        $post = Post::findOrFail($post);
+        $user = User::all();
         return view('posts.edit',[
             'post' => $post,
+            'users' => $user,
         ]);
     }
 
@@ -68,16 +71,20 @@ class PostController extends Controller
             'post' => $dbPost,
         ]);
     }
-    public function update()
+    public function update(Request $request, $post)
     {
-        return 'we are in update';
+        $post = Post::findOrFail($post);
+        $post->update(['title' => $request->title, 'body' => $request->body, 'user_id' => $request->published_by]);
+        // $post->update(request()->all());
+        return to_route('posts.index');
+        //redirect to /posts
     }
-
-    public function destroy()
+    public function destroy($post)
     {
-        return 'we are in destroy';
+        $post = Post::findOrFail($post);
+        $post->delete();
+        return to_route('posts.index');
     }
-
 
 
 }

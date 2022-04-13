@@ -18,7 +18,7 @@
                     <p>Published At: {{date('Y-m-d', strtotime($post->created_at))}}</p>
                     <br>
                     <div>
-                       Posted by: {{$post->published_by}}
+                       Posted by: {{$post->user ? $post->user->name : 'Not Found'}}
                     </div>
                 </div>
             </div>
