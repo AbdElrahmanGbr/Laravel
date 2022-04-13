@@ -63,12 +63,12 @@ class PostController extends Controller
         ]);
 
     }
-    public function update($post)
+    public function update()
     {
         return 'we are in update';
     }
 
-    public function destroy($post)
+    public function destroy()
     {
         return 'we are in destroy';
     }
