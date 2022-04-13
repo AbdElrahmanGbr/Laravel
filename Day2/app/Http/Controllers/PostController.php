@@ -81,8 +81,9 @@ class PostController extends Controller
     }
     public function destroy($post)
     {
-        $post = Post::findOrFail($post);
-        $post->delete();
+        $post = Post::find($post);
+        $post -> delete();
+        $post -> Comments() -> delete();
         return to_route('posts.index');
     }
 

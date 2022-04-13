@@ -31,6 +31,7 @@
               @csrf
               @method('DELETE')
               <button type="submit" onclick="return confirm('Are you sure, you wanna delete this post?!')" class="btn btn-danger">Delete</button>
+            </form>
           </td>
         </tr>
         @endforeach
