@@ -26,9 +26,12 @@
 
                             <div class="form-group">
                                 <label for="">Published by</label>
-                                <input type="text" name="published_by" class="form-control">
+                                <select name="published_by" id="" class="form-control">
+                                    <option value="">Select Author</option>
+                                    @foreach($users as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
                             </div>
-
                             <div class="form-group">
                                 <label for="">Published At</label>
                                 <input type="date" name="published_at" class="form-control">
