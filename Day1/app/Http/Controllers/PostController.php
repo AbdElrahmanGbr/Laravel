@@ -27,8 +27,19 @@ class PostController extends Controller
 
     public function store()
     {
-        return 'we are in store';
+        // $postData=request()->all();
+        // $post=[
+        //     "id"=>count($this->posts)+1,
+        //     "title"=>request()["title"],
+        //     "posted_by"=>request()["posted_by"],
+        //     "created_at"=>request()["created_at"],
+        // ];
+        // $this->posts[]=$post;
+        // return redirect('/posts'); trying to work with create post
+        // dd(request()->all());
+        return redirect('/posts');
     }
+
     public function edit($post)
     {
         return view('posts.edit',[
@@ -51,6 +62,15 @@ class PostController extends Controller
             'post' => $posts[$post],
         ]);
 
+    }
+    public function update($post)
+    {
+        return 'we are in update';
+    }
+
+    public function destroy()
+    {
+        return 'we are in destroy';
     }
 
 
