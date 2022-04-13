@@ -39,7 +39,9 @@ class PostController extends Controller
             'title' => $data['title'],
             'body' => $data['body'],
             'published_by' => $data['published_by'],
+            // 'published_at' => $data['published_at'],
         ]);
+        //insert into posts table values($data['title'],$data['body'],$data['published_by']);
         // redirect to /posts
         return redirect('/posts');
     }

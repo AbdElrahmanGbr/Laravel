@@ -26,18 +26,19 @@
 
                             <div class="form-group">
                                 <label for="">Published by</label>
-                                <select id="" class="form-control">
-                                    <option value="">Select Author</option>
+                                <select name="published_by" id="" class="form-control">
+                                    <!-- <option value="">Select Author</option> -->
                                     @foreach($users as $user)
                                     <option value="{{$user->id}}">{{$user->name}}</option>
                                     @endforeach
                             </div>
-                            <div class="form-group">
-                                <label for="">Published At</label>
-                                <input type="date" name="published_at" class="form-control">
-                            </div>
+                            <!-- <label for="">Published At</label>
+                            <input type="date" name="published_at" class="form-control"> -->
                             
-                            <button type="submit" class="btn btn-primary m-2">Submit</button>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary m-2" value="Submit">
+                                <!-- <button type="submit" class="btn btn-primary m-2">Submit</button> -->
+                            </div>
                         </form>
                         
                     </div>
