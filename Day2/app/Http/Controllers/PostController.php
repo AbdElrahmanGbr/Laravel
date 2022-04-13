@@ -12,10 +12,10 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
+        $posts = Post::paginate(5);
         return view('posts.index',[
             'allPosts' => $posts, // this is the key passing it to view (index.blade.php)
         ]);
-        $posts = Post::paginate(5);
     }
 
     public function create()
