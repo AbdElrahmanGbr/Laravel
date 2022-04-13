@@ -63,7 +63,7 @@ class PostController extends Controller
         ]);
 
     }
-    public function update($post)
+    public function update()
     {
         return 'we are in update';
     }
