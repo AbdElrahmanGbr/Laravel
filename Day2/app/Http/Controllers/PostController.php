@@ -15,6 +15,7 @@ class PostController extends Controller
         return view('posts.index',[
             'allPosts' => $posts, // this is the key passing it to view (index.blade.php)
         ]);
+        $posts = Post::paginate(5);
     }
 
     public function create()
@@ -38,12 +39,13 @@ class PostController extends Controller
         Post::create([
             'title' => $data['title'],
             'body' => $data['body'],
-            'published_by' => $data['published_by'],
+            'user_id' => $data['published_by'], // this is the foreign key
+            // 'published_by' => $data['published_by'],
             // 'published_at' => $data['published_at'],
         ]);
         //insert into posts table values($data['title'],$data['body'],$data['published_by']);
         // redirect to /posts
-        return redirect('/posts');
+        return to_route('posts.index');
     }
 
     public function edit($post)
