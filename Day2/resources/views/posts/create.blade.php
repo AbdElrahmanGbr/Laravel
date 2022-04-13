@@ -26,10 +26,10 @@
 
                             <div class="form-group">
                                 <label for="">Published by</label>
-                                <select name="published_by" id="" class="form-control">
+                                <select id="" class="form-control">
                                     <option value="">Select Author</option>
                                     @foreach($users as $user)
-                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
                                     @endforeach
                             </div>
                             <div class="form-group">

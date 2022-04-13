@@ -29,6 +29,18 @@ class PostController extends Controller
 
     public function store()
     {
+        // get me the request data
+        // $data = $_REQUEST; // this is the same as request()->all()
+        $data = request()->all(); // global helper method to get all the data from the request
+        // $title = request()->title;
+        // dd($data);
+        // store it in the database
+        Post::create([
+            'title' => $data['title'],
+            'body' => $data['body'],
+            'published_by' => $data['published_by'],
+        ]);
+        // redirect to /posts
         return redirect('/posts');
     }
 
@@ -48,7 +60,9 @@ class PostController extends Controller
         // Post::where('title','first post')->first();
 
         // dd($dbPost);
-        return view('posts.show');
+        return view('posts.show',[
+            'post' => $dbPost,
+        ]);
     }
     public function update()
     {

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('body');
+            $table->unsignedBigInteger('published_by');
             $table->timestamps();
         });
     }
