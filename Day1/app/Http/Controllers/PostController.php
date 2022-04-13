@@ -6,17 +6,17 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+   private $posts = [
+       ['id' => 1, 'title' => 'first post', 'posted_by' => 'ahmed', 'created_at' => '2022-04-12'],
+       ['id' => 2, 'title' => 'second post', 'posted_by' => 'mohamed', 'created_at' => '2022-04-12'],
+         ['id' => 3, 'title' => 'third post', 'posted_by' => 'ali', 'created_at' => '2022-04-12'],
+   ];
     public function index()
     {
-        $posts = [
-            ['id' => 1, 'title' => 'first post', 'posted_by' => 'Gbr', 'created_at' => '2022-04-12'],
-            ['id' => 2, 'title' => 'second post', 'posted_by' => 'Ahmed', 'created_at' => '2022-04-12'],
-            ['id' => 3, 'title' => 'third post', 'posted_by' => 'Mohammed', 'created_at' => '2022-04-12'],
-        ];
-        // dd($posts); // this is the debug function (global helper method stops the excution of the code and displays the data)
-        return view('posts.index',[
-            'allPosts' => $posts, // this is the key passing it to view (index.blade.php)
-        ]);
+
+       return view('posts.index',['allPosts'=>$this->posts]);
+
+
     }
 
     public function create()
@@ -26,26 +26,58 @@ class PostController extends Controller
 
     public function store()
     {
-        return 'we are in store';
-    }
-    public function edit($post)
-    {
-        return view('posts.edit',[
-            'post' => $post,
-        ]);
+        $postData=request()->all();
+
+        $post=[
+            "id"=>count($this->posts )+1,
+            "title" => request()["title"],
+            "posted_by" => request()['postedby'],
+            "created_at" => request()['createdat']
+        ];
+
+
+       array_push($this->posts,$post);
+
+
+         return view('posts.index',['allPosts' => $this->posts]);
+
+
+
     }
 
     public function show($post)
     {
-        //redirect to /posts
-        // dd($post);
-        $post1 = explode(', ', $post);
-        return view('posts.show',[
-            'post' => $post1,
-        ]);
+
+        $post = $this->posts[$post-1];
+
+        return view('posts.show',['post'=>$post]);
+
+    }
+
+    public function edit($id){
+
+
+        $post=$this->posts[$id];
+
+        return view('posts.edit',['post'=>$post]);
+    }
+
+    public function update($id,Request $request){
+
+        $post=$request->all();
+
+        $this->posts[$id]=$post;
+
+        return view('posts.index',['allPosts' => $this->posts]);
 
     }
 
 
+    public function destroy ($id){
 
+        unset($this->posts[$id]);
+
+       return view('posts.index',['allPosts' => $this->posts]);
+
+       }
 }
