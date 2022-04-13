@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
 class PostController extends Controller
 {
     public function index()
@@ -39,9 +40,15 @@ class PostController extends Controller
     {
         //redirect to /posts
         // dd($post);
-        $post1 = explode(', ', $post);
+        $posts = [
+            ['id' => 1, 'title' => 'first post', 'posted_by' => 'Gbr', 'created_at' => '2022-04-12'],
+            ['id' => 2, 'title' => 'second post', 'posted_by' => 'Ahmed', 'created_at' => '2022-04-12'],
+            ['id' => 3, 'title' => 'third post', 'posted_by' => 'Mohammed', 'created_at' => '2022-04-12'],
+        ];
+        
+
         return view('posts.show',[
-            'post' => $post1,
+            'post' => $posts[$post],
         ]);
 
     }
