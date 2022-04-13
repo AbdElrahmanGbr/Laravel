@@ -26,7 +26,7 @@
             <td>
                 <a href="{{route('posts.show', ['post' => $post['id']])}}" class="btn btn-info">View</a>
                 <a href="{{route('posts.edit', ['post' => $post['id']])}}" class="btn btn-primary">Edit</a>
-                <form action="{{route('posts.destroy', ['post' => $post['id']])}}" method="post">
+                <!-- <form action="{{route('posts.destroy', ['post' => $post['id']])}}" method="post"> -->
                     @csrf
                     @method('DELETE')
                     <button type="submit" onclick="return confirm ('Are you sure, you want to DELETE?')" class="btn btn-danger">Delete</button>
