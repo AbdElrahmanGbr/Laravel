@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
     //
@@ -21,16 +24,19 @@ class PostController extends Controller
         ]);
     }
     //to create a new post
-    public function store()
+    public function store(StorePostRequest $request)
     {
-        //some logic to store data in db
         $data = request()->all();
-        //insert into database
+        $slug = SlugService::createSlug(Post::class, 'slug', $data['title']);
+        $path = Storage::putFile('public', request()->file('image'));
+        $url = Storage::url($path);
         Post::create(
             [
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'user_id' => $data['post_creator'],
+                'slug' => $slug,
+                'image_path' => $url,
             ]
         );
         return to_route('posts.index');
@@ -39,7 +45,6 @@ class PostController extends Controller
     public function show($post)
     {
         $post = Post::find($post);
-        // dd($post);
         return view('posts.show', [
             'posts' => $post,
         ]);
@@ -56,15 +61,21 @@ class PostController extends Controller
         ]);
     }
     //update a post
-    public function update($post)
+    public function update(UpdatePostRequest $request, $post)
     {
         $singlePost = Post::findOrFail($post);
         $data = request()->all();
+        $path = Storage::putFile('public', request()->file('image'));
+        $url = Storage::url($path);
+        $slug = SlugService::createSlug(Post::class, 'slug', $data['title']);
         $singlePost->update(
             [
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'user_id' => $data['post_creator'],
+                'image_path' => $data['image'],
+                'slug' => $slug,
+                'image_path' => $url,
             ]
         );
         return to_route('posts.index');
@@ -72,7 +83,14 @@ class PostController extends Controller
     //delete a post
     public function destroy($post)
     {
+        // Comment::where('id', $commentId)->delete();
+
         $singlePost = Post::findOrFail($post);
+        $location =  $singlePost->image_path;
+        $imageName = basename($location);
+
+        $imageURL = "D:\DOCS MOHMA\iti\OPEN SOURCE\Larvel\Day 1\Lab1\\example-app\storage\app\public" . '\\' . $imageName;
+        unlink($imageURL);
         $singlePost->Comments()->delete();
         $singlePost->delete();
         return to_route('posts.index');

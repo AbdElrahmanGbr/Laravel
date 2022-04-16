@@ -35,3 +35,7 @@ Route::get('/comments/{postId}/{commentId}', [CommentController::class, 'view'])
 Route::patch('/comments/{postId}/{commentId}', [CommentController::class, 'edit'])->name('comments.update');
 
 // Route::resource('posts', PostController::class);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
