@@ -1,99 +1,79 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
-
-
 class PostController extends Controller
 {
+    //
     public function index()
     {
-        $posts = Post::all();
-        $posts = Post::paginate(5);
-        $comments = \App\Models\Comment::with('commentable')->get();
-      return view('posts.index',['allPosts'=>$posts, 'comments'=>$comments ]);
-
+        $posts = Post::paginate(15);;
+        return view('posts.index', [
+            'allPosts' => $posts,
+        ]);
     }
-
     public function create()
     {
-        $user = User::all();
-        //query to get all users
-        
-        return view('posts.create',[
-            'users' => $user, // this is the key passing it to view (index.blade.php)
+        $users = User::all();
+        return view('posts.create', [
+            'users' => $users,
         ]);
     }
-
+    //to create a new post
     public function store()
     {
-        // get me the request data
-        // $data = $_REQUEST; // this is the same as request()->all()
-        $data = request()->all(); // global helper method to get all the data from the request
-        // $title = request()->title;
-        // dd($data);
-        // store it in the database
-        Post::create([
-            'title' => $data['title'],
-            'body' => $data['body'],
-            'user_id' => $data['published_by'], // this is the foreign key
-            // 'published_by' => $data['published_by'],
-            // 'published_at' => $data['published_at'],
-        ]);
-        //insert into posts table values($data['title'],$data['body'],$data['published_by']);
-        // redirect to /posts
+        //some logic to store data in db
+        $data = request()->all();
+        //insert into database
+        Post::create(
+            [
+                'title' => $data['title'],
+                'description' => $data['description'],
+                'user_id' => $data['post_creator'],
+            ]
+        );
         return to_route('posts.index');
     }
-
-    public function edit($post)
-    {
-        $post = Post::findOrFail($post);
-        $user = User::all();
-        return view('posts.edit',[
-            'post' => $post,
-            'users' => $user,
-        ]);
-    }
-
-        // to show a single post
-        public function show($post)
-        {
-            $post = Post::find($post);
-            // dd($post);
-            return view('posts.show', [
-                'posts' => $post,
-            ]);
-        }
-        
-    // {
-        //select * from posts where id = 1
-        //second approach to find the post
-        // $dbPost = Post::where('id',$post)->first();
-        // Post::where('title','first post')->first();
-        // dd($dbPost);
-        // return view('posts.show',[
-        //     'post' => $dbPost,
-        // ]);
-
-    // }
-    public function update(Request $request, $post)
-    {
-        $post = Post::findOrFail($post);
-        $post->update(['title' => $request->title, 'body' => $request->body, 'user_id' => $request->published_by]);
-        // $post->update(request()->all());
-        return to_route('posts.index');
-        //redirect to /posts
-    }
-    public function destroy($post)
+    // to show a single post
+    public function show($post)
     {
         $post = Post::find($post);
-        $post -> Comments() -> delete();
-        $post -> delete();
+        // dd($post);
+        return view('posts.show', [
+            'posts' => $post,
+        ]);
+    }
+    //to edit a post
+    public function edit($post)
+    {
+        $singlePost = Post::findOrFail($post);
+        $users = User::all();
+        // dd($singlePost);
+        return view('posts.edit', [
+            'post' => $singlePost,
+            'users' => $users,
+        ]);
+    }
+    //update a post
+    public function update($post)
+    {
+        $singlePost = Post::findOrFail($post);
+        $data = request()->all();
+        $singlePost->update(
+            [
+                'title' => $data['title'],
+                'description' => $data['description'],
+                'user_id' => $data['post_creator'],
+            ]
+        );
         return to_route('posts.index');
     }
-
-
+    //delete a post
+    public function destroy($post)
+    {
+        $singlePost = Post::findOrFail($post);
+        $singlePost->delete()->comments()->delete();
+        return to_route('posts.index');
+    }
 }
