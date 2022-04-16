@@ -1,58 +1,82 @@
 @extends('layouts.app')
-@section('title') Post Card @endsection
+@section('title') Show @endsection
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('View Post') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <h2>Post title: {{$post->title}}</h2>
-
-                    <p>Published At: {{date('Y-m-d', strtotime($post->created_at))}}</p>
-                    <br>
-                    <div>
-                       Posted by: {{$post->user ? $post->user->name : 'Not Found'}}
-                    </div>
-                </div>
-            </div>
+<div class="card my-4">
+    <div class="card-header fw-bold fs-1">
+        Post info
+    </div>
+    <div class="card-body ">
+        <h5 class="card-title fs-4">
+            <span class="fw-bold">Title:</span>
+            <p class="d-inline-block card-text text-muted">
+                {{$posts['title']}}
+            </p>
+        </h5>
+        <div class="fs-4">
+            <span class="fw-bold ">Description:</span>
+            <p class="card-text d-inline-block text-muted ">
+                {{$posts['description']}}
+            </p>
         </div>
     </div>
 </div>
-@endsection
-@foreach ($post->comments as $comment)
-<div class='flex flex-col mt-6 border p-4 rounded-lg border-slate-600'>
-        <h2 class='text-lg'>{{$comment->user->name}}</h2>
-        <p class='text-md'>{{$comment->body}}</p>
-        <span class='text-sm text-gray-500'>last updated {{$comment->updated_at}}</span>
-        <div class="flex items-center mt-5">
-            <form method='POST'
-                action={{route('comments.delete', ['postId' => $post['id'], 'commentId' => $comment->id])}}>
+<!-- post creator info -->
+<div class="card my-4">
+    <div class="card-header fw-bold fs-1">
+        Post Creator info
+    </div>
+    <div class="card-body ">
+        <h5 class="card-title fs-4">
+            <span class="fw-bold">Name:</span>
+            <p class="d-inline-block card-text text-muted">
+                {{$posts->user ? $posts->user->name : 'Not Found'}}
+            </p>
+        </h5>
+        <h5 class="card-title fs-4">
+            <span class="fw-bold">Email:</span>
+            <p class="d-inline-block card-text text-muted">
+                {{$posts->user ? $posts->user->email : 'Not Found'}}
+            </p>
+        </h5>
+        <h5 class="card-title fs-4">
+            <span class="fw-bold">Created At:</span>
+            <p class="d-inline-block card-text text-muted">
+                {{$posts['created_at']->toDayDateTimeString()}}
+            </p>
+        </h5>
+
+    </div>
+</div>
+<!-- comments -->
+<div class='mt-4'>
+    @foreach ($posts->comments as $comment)
+    <div class='my-4 border p-4 rounded-lg'>
+        <h2 class='text-lg fw-bold'>{{$comment->user->name}}</h2>
+        <p class='text-lg my-2 fs-2'>{{$comment->body}}</p>
+        <span class='text-sm'>Last Updated At: {{$comment->updated_at->toDayDateTimeString()}}</span>
+        <div class="mt-4  flex">
+            <form class="text-center d-inline" method='POST' action={{route('comments.delete', ['postId' => $posts['id'], 'commentId' => $comment->id])}}>
                 @csrf
                 @method('DELETE')
-                <button type="submit" class='btn btn-xs btn-primary'>Delete</button>
+                <button type="sumbit" class='btn btn-lg btn-primary'>Delete</button>
             </form>
-            <a class='btn btn-xs btn-success ml-4'
-                href={{route('comments.view', ['postId' => $post['id'], 'commentId' => $comment->id])}}>
+            <a class='btn btn-lg btn-success ml-4' href={{route('comments.view', ['postId' => $posts['id'], 'commentId' => $comment->id])}}>
                 Edit
             </a>
         </div>
     </div>
     @endforeach
     <div class='flex flex-col mt-6  p-4 rounded-lg'>
-        <form method="POST" class='flex items-center'
-            action={{route('comments.update', ['postId' => $post['id'], 'commentId' => $comment->id])}}>
+        <form method="POST" class='flex items-center' action={{route('comments.create', ['postId' => $posts['id']])}}>
             @csrf
-            @method('PATCH')
-            <label for="comment" class="label mr-4">Edit comment</label>
-            <input class="input flex-1 input-xlg" placeholder="edit comment" type="text" name="comment" id="comment"
-                value={{$comment["body"]}} />
-            <button type="submit" class='btn btn-info ml-4'>Edit comment</button>
+            <label class="label mr-4">Add comment</label>
+            <input class="input flex-1 input-xlg" placeholder="Add comment" type="text" name="comment" id="coment" />
+            <button type="sumbit" class='btn btn-info ml-4'>Add</button>
         </form>
     </div>
+</div>
+<div>
+    <a href="{{route('posts.index')}}" class="btn btn-primary btn-lg">Back</a>
+</div>
+
+@endsection

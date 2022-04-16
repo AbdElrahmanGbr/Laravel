@@ -58,19 +58,16 @@ class PostController extends Controller
         ]);
     }
 
-    public function show($post)
-    {
-        //redirect to /posts
-        // dd($post);
-        $posts = Post::all();
-        $comments = \App\Models\Comment::with('commentable')->get();
-        $dbPost = Post::findOrFail($post);
-        return view('posts.show',[
-            'post' => $dbPost,
-            'allPosts'=>$posts,
-            'comments'=>$comments,
-        ]);
-    }
+        // to show a single post
+        public function show($post)
+        {
+            $post = Post::find($post);
+            // dd($post);
+            return view('posts.show', [
+                'posts' => $post,
+            ]);
+        }
+        
     // {
         //select * from posts where id = 1
         //second approach to find the post

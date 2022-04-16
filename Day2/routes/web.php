@@ -29,10 +29,9 @@ Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')
 Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('posts/{post}', [PostController::class, 'update'])->name('posts.update');
 Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-Route::post('/posts/{post}/comments', [PostController::class, 'comment'])->name('posts.comment');
-Route::post('/comments/{postId}',[CommentController::class,'create'])->name('comments.create');
-Route::delete('/comments/{postId}/{commentId}',[CommentController::class,'destroy'])->name('comments.destroy');
-Route::get('/comments/{postId}/{commentId}/edit',[CommentController::class,'edit'])->name('comments.edit');
-Route::patch('/comments/{postId}/{commentId}',[CommentController::class,'update'])->name('comments.update');
+Route::post('/comments/{postId}', [CommentController::class, 'create'])->name('comments.create');
+Route::delete('/comments/{postId}/{commentId}', [CommentController::class, 'delete'])->name('comments.delete');
+Route::get('/comments/{postId}/{commentId}', [CommentController::class, 'view'])->name('comments.view');
+Route::patch('/comments/{postId}/{commentId}', [CommentController::class, 'edit'])->name('comments.update');
 
 // Route::resource('posts', PostController::class);

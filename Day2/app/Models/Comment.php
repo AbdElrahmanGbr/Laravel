@@ -16,10 +16,10 @@ class Comment extends Model
     ];
     public function commentable()
     {
-        return $this->morphTo();
+        return $this->morphTo(); // polymorphic relationship
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class); // one to one relationship
     }
 }

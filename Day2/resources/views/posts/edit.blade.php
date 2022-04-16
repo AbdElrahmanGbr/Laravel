@@ -1,50 +1,41 @@
-@extends('layouts.app')
-@section('title') Edit post @endsection
+@extends('layout.app')
+
+@section('title')
+{{$post['title']}}
+@endsection
+
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Edit Post</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <form action="{{route('posts.update',['post'=>$post->id])}}" method="post">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="">{{$post->title}}</label>
-                            <input type="text" name="title" class="form-control" value="{{$post['title']}}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="">{{$post->body}}</label>
-                            <textarea name="body" id="" cols="30" rows="10" class="form-control">{{$post->body}}</textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="">{{$post->published_by}}</label>
-                            <select name="published_by" id="" class="form-control">
-                                <!-- <option value="">Select Author</option> -->
-                                @foreach($users as $user)
-                                <option value="{{$user->id}}" {{$post->published_by == $user->id ? 'selected' : ''}}>{{$user->name}}</option>
-                                @endforeach
-                            </div>
-                            <!-- <label for="">Published At</label>
-                            <input type="date" name="published_at" class="form-control"> -->
-                            
-                            <div class="form-group">
-                                <input type="submit" class="btn btn-primary m-2" value="Submit">
-                                <!-- <button type="submit" class="btn btn-primary m-2">Submit</button> -->
-                            </div>
-                        </form>
-                    
-                </div>
-            </div>
+<div class=''>
+    <h1 class="text-6xl">{{$post['title']}}</h1>
+    <p class="text-md italic my-3 text-sm">created by <span class="text-content-base ">{{$post->user ? $post->user->name : 'unknown'}}</span> on {{\Carbon\Carbon::parse($post['created_at'])->format('M-d-Y');}}</p>
+    <p class="text-lg mt-6">{{$post['description']}}</p>
+</div>
+<div class='mt-20 max-w-2xl'>
+    @foreach ($post->comments as $cmnt)
+    <div class='flex flex-col mt-6 border p-4 rounded-lg border-slate-600'>
+        <h2 class='text-lg'>{{$cmnt->user->name}}</h2>
+        <p class='text-md'>{{$cmnt->body}}</p>
+        <span class='text-sm text-gray-500'>last updated {{$cmnt->updated_at}}</span>
+        <div class="flex items-center mt-5">
+            <form method='POST' action={{route('comments.delete', ['postId' => $post['id'], 'commentId' => $comment->id])}}>
+                @csrf
+                @method('DELETE')
+                <button type="sumbit" class='btn btn-xs btn-primary'>Delete</button>
+            </form>
+            <a class='btn btn-xs btn-success ml-4' href={{route('comments.view', ['postId' => $post['id'], 'commentId' => $cmnt->id])}}>
+                Edit
+            </a>
         </div>
+    </div>
+    @endforeach
+    <div class='flex flex-col mt-6  p-4 rounded-lg'>
+        <form method="POST" class='flex items-center' action={{route('comments.update', ['postId' => $post['id'], 'commentId' => $comment->id])}}>
+            @csrf
+            @method('PATCH')
+            <label for="comment" class="label mr-4">Edit comment</label>
+            <input class="input flex-1 input-xlg" placeholder="edit comment" type="text" name="comment" id="comment" value={{$comment["body"]}} />
+            <button type="sumbit" class='btn btn-info ml-4'>Edit comment</button>
+        </form>
     </div>
 </div>
 @endsection
