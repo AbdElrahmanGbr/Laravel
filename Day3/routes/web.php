@@ -38,4 +38,4 @@ Route::patch('/comments/{postId}/{commentId}', [CommentController::class, 'edit'
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

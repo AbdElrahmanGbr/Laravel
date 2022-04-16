@@ -89,8 +89,8 @@ class PostController extends Controller
         $location =  $singlePost->image_path;
         $imageName = basename($location);
 
-        $imageURL = "E:\GitHub\Laravel\Day3\public\storage" . '\\' . $imageName;
-        unlink($imageURL);
+        // $imageURL = "E:\GitHub\Laravel\Day3\public\storage" . '\\' . $imageName;
+        // unlink($imageURL);
         $singlePost->Comments()->delete();
         $singlePost->delete();
         return to_route('posts.index');
