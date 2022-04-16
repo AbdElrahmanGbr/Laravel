@@ -1,48 +1,34 @@
 @extends('layouts.app')
-@section('title') Create Post @endsection
+
+@section('title')Create @endsection
+
 @section('content')
-<h1 class="text-center">New Post</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Create Post</div>
-                    <div class="card-body">
-                         @if (session('status')) <!-- if session has a key status -->
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }} <!-- display the value of session key status -->
-                            </div>
-                        @endif
-                        <form method="POST" action="{{route('posts.store')}}">
-                            @csrf <!-- This is a security feature to prevent Cross-Site Request Forgery -->
-                            <div class="form-group">
-                                <label for="">Post Title</label>
-                                <input type="text" name="title" class="form-control">
-                            </div>
+<form method="POST" action="{{route('posts.store')}}" enctype="multipart/form-data">
+    @csrf
+    <div class="my-4">
+        <label for="exampleFormControlInput1" class="form-label fs-2">Title</label>
+        <input name="title" type="text" class="form-control" id="exampleFormControlInput1">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label fs-2">Description</label>
+        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
 
-                            <div class="form-group">
-                                <label for="">Post Body</label>
-                                <textarea name="body" id="" cols="30" rows="10" class="form-control"></textarea>
-                            </div>
+    <div class="my-3">
+        <input class="form-control form-control-lg" name="image" id="formFileLg" type="file">
+    </div>
 
-                            <div class="form-group">
-                                <label for="">Published by</label>
-                                <select name="published_by" id="" class="form-control">
-                                    <option value="">Select Author</option>
-                                    @foreach($users as $user)
-                                    <option value="{{$user->id}}">{{$user->name}}</option>
-                                    @endforeach
-                            </div>
-                            <!-- <label for="">Published At</label>
-                            <input type="date" name="published_at" class="form-control"> -->
-                            
-                            <div class="form-group">
-                                <input type="submit" class="btn btn-primary m-2" value="Submit">
-                                <!-- <button type="submit" class="btn btn-primary m-2">Submit</button> -->
-                            </div>
-                        </form>
-                        
-                    </div>
-                </div>
-            </div>
-            @endsection
-      
+
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label fs-2">Post Creator</label>
+        <select name="post_creator" class="form-control">
+            @foreach($users as $user)
+            <option value="{{$user->id}}">{{$user->name}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success">Create Post</button>
+    </div>
+</form>
+@endsection
