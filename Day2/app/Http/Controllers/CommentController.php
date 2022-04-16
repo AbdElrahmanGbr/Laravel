@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -11,34 +13,32 @@ class CommentController extends Controller
     {
         $post = Post::findOrFail($postId);
         $req = request();
-        $post->Comment()->create([
-            'user_id' => $req->user_id,
-            'body' => $req->body,
-            'commentable_id' => $postId,
-            'commentable_type' => 'App\Models\Post',
+        $post->Comments()->create([
+            'user_id' => 1,
+            'body' => $req->comment,
+            'commentable_id' => (int)$postId,
+            'commentable_type' => Post::class,
         ]);
-        return redirect()->route('posts.show', $postId);
+        return redirect('posts/' . $postId);
+    }
+    public function delete($postId, $commentId)
+    {
+        // $post = Post::findOrFail($postId);
+        Comment::where('id', $commentId)->delete();
+        return redirect('posts/' . $postId);
     }
     public function view($postId, $commentId)
     {
         $post = Post::findOrFail($postId);
         $comment = Comment::where('id', $commentId)->first();
-        return view('comments.edit', [
-            'post' => $post,
-            'comment' => $comment,
-        ]);
+        return view('comments.edit', ['post' => $post, 'comment' => $comment]);
     }
-    public function edit($postId, $commentId)
+    public function edit($postId, $commentId, Request $req)
     {
-        $req = request();
-        Comment::where('id', $commentId)->update([
-            'body' => $req->body,
+        $post = Post::find((int) $postId);
+        Comment::where('id', $commentId)->first()->update([
+            'body' => $req->comment
         ]);
-        return redirect()->route('posts.show', $postId);
-    }
-    public function delete($postId, $commentId)
-    {
-        Comment::where('id', $commentId)->delete();
-        return redirect()->route('posts.show', $postId);
+        return redirect('posts/' . $postId);
     }
 }
