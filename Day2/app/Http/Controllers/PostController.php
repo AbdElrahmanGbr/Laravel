@@ -73,7 +73,8 @@ class PostController extends Controller
     public function destroy($post)
     {
         $singlePost = Post::findOrFail($post);
-        $singlePost->delete()->comments()->delete();
+        $singlePost->Comments()->delete();
+        $singlePost->delete();
         return to_route('posts.index');
     }
 }
