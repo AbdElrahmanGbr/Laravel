@@ -11,7 +11,7 @@
     </div>
     <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label fs-2">Description</label>
-        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     </div>
 
     <div class="my-3">
