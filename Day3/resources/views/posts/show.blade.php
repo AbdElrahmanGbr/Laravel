@@ -15,7 +15,7 @@
         <div class="fs-4">
             <span class="fw-bold ">Description:</span>
             <p class="card-text d-inline-block text-muted ">
-                {{$posts['description']}}
+                {{$posts['body']}}
             </p>
         </div>
     </div>

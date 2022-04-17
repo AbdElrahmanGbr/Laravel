@@ -33,7 +33,7 @@ class PostController extends Controller
         Post::create(
             [
                 'title' => $data['title'],
-                'description' => $data['description'],
+                'body' => $data['body'],
                 'user_id' => $data['post_creator'],
                 'slug' => $slug,
                 'image_path' => $url,
@@ -71,7 +71,7 @@ class PostController extends Controller
         $singlePost->update(
             [
                 'title' => $data['title'],
-                'description' => $data['description'],
+                'body' => $data['body'],
                 'user_id' => $data['post_creator'],
                 'image_path' => $data['image'],
                 'slug' => $slug,
