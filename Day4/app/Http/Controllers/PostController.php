@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\User;
 use Cviebrock\EloquentSluggable\Services\SlugService;
@@ -14,45 +15,35 @@ class PostController extends Controller
     //
     public function index()
     {
-        $posts = Post::paginate(15);;
-        return view('posts.index', [
-            'allPosts' => $posts,
-        ]);
+        $posts = Post::all();
+        return PostResource::collection($posts);
     }
 
-    public function create()
-    {
-        $users = User::all();
-        return view('posts.create', [
-            'users' => $users,
-        ]);
-    }
     //to create a new post
     public function store(StorePostRequest $request)
     {
-        $data = request()->all();
-        $slug = SlugService::createSlug(Post::class, 'slug', $data['title']);
-        $path = Storage::putFile('public', request()->file('image'));
-        $url = Storage::url($path);
 
-        Post::create(
-            [
-                'title' => $data['title'],
-                'body' => $data['body'],
-                'user_id' => $data['post_creator'],
-                'slug' => $slug,
-                'image_path' => $url,
-            ]
-        );
-        return to_route('posts.index');
+        //to change the default behavior of the request
+        // if(request()->header('Accept') && request()->header('Accept') == 'application/pdf') {
+        //     return ' some pdf';
+        // }
+
+        $data = $request->all();
+
+        //store the request data in the db
+        $post = Post::create([
+            'title' => $data['title'],
+            'body' => $data['body'],
+            'user_id' => $data['post_creator'],
+        ]);
+
+        return new PostResource($post);
     }
     // to show a single post
-    public function show($post)
+    public function show($postId)
     {
-        $post = Post::find($post);
-        return view('posts.show', [
-            'posts' => $post,
-        ]);
+        $post = Post::find($postId);
+        return new PostResource($post);
     }
     //to edit a post
     public function edit($post)
