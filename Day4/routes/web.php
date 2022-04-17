@@ -3,8 +3,10 @@
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController; //== require
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\SocialController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,7 +52,22 @@ Route::get('/auth/redirect', function () {
 });
 
 Route::get('/auth/callback', function () {
-    $user = Socialite::driver('github')->user();
+    $githubUser = Socialite::driver('github')->user();
+    // dd($githubUser);
+    $user = User::where('github_id', $githubUser->id)->first();
+    if (!$user) {
+        $user = User::create([
+            'name' => $githubUser->name,
+            'email' => $githubUser->email,
+            'github_id' => $githubUser->id,
+            'avatar' => $githubUser->avatar,
+        ]);
+    }
+    Auth::login($user);
+    return redirect('/');
+});
+
+Route::get('/auth/redirect/{provider}', [SocialController::class, 'redirect']);
+Route::get('/auth/callback/{provider}', [SocialController::class, 'callback']);
 
     // $user->token
-});
