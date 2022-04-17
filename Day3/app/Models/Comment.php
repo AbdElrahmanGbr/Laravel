@@ -2,42 +2,24 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Post extends Model
+class Comment extends Model
 {
     use HasFactory;
-    use Sluggable;
-
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
-    public function getRouteKeyName(): string
-    {
-        return $this->getSlugKeyName();
-    }
     protected $fillable = [
-        'title',
-        'description',
+        'body',
         'user_id',
-        'slug',
-        'image_path',
+        'commentable_id',
+        'commentable_type'
     ];
-
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable');
     }
 }
