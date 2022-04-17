@@ -17,22 +17,22 @@ class SocialController extends Controller
 
     public function callback($provider)
     {
-        $gitHubInfo = Socialite::driver($provider)->user();
-        $user = $this->getUser($gitHubInfo, $provider);
+        $userCredentials = Socialite::driver($provider)->user();
+        $user = $this->getUser($userCredentials, $provider);
         auth()->login($user);
         return redirect()->to('/posts');
     }
 
-    public function getUser($gitHubInfo, $provider)
+    public function getUser($userCredentials, $provider)
     {
-        $user = User::where('github_id', $gitHubInfo->id)->first() ? User::where('github_id', $gitHubInfo->id)->first() : User::where('email', $gitHubInfo->email)->first();
+        $user = User::where('github_id', $userCredentials->id)->first() ? User::where('github_id', $userCredentials->id)->first() : User::where('email', $userCredentials->email)->first();
         if (!$user) {
             $user = User::create([
-                'name' => $gitHubInfo->name,
-                'email' => $gitHubInfo->email,
-                // 'github_id' => $gitHubInfo->id,
+                'name' => $userCredentials->name,
+                'email' => $userCredentials->email,
+                // 'github_id' => $userCredentials->id,
                 'password' => '12345678',
-                'github_token' => $gitHubInfo->token,
+                'github_token' => $userCredentials->token,
             ]);
         }
         return $user;

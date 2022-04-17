@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->unsignedBigInteger('github_id')->notNullable()->default(0);
-            $table->string('github_token')->notNullable()->default('eksde');
-            $table->string('github_refresh_token')->notNullable()->default('eksde');
+            $table->string('github_token')->notNullable()->default('GitHubToken');
+            $table->string('github_refresh_token')->notNullable()->default('GitHubRefreshToken');
             $table->timestamps();
         });
     }
