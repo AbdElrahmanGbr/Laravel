@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController; // <-- this is the controller same as require
+use App\Http\Controllers\PostController; //== require
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,26 +17,40 @@ use App\Http\Controllers\TestController; // <-- this is the controller same as r
 */
 
 Route::get('/', function () {
-    return 'we are in files';
-    // return view('welcome');
+    if (Auth::check()) {
+        return view('home');
+    } else {
+        return view('auth.login');
+    }
 });
 
-// put the dynamic urls in the end of routes uri (/posts/create) goes to any uri that starts with /posts/{any}
-// giving the uri a name (posts.name) "shortcut" to define the uri
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-Route::get('/posts/create/', [PostController::class, 'create'])->name('posts.create');
-Route::post('/posts',[PostController::class, 'store'])->name('posts.store');
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-Route::put('posts/{post}', [PostController::class, 'update'])->name('posts.update');
-Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-Route::post('/comments/{postId}', [CommentController::class, 'create'])->name('comments.create');
-Route::delete('/comments/{postId}/{commentId}', [CommentController::class, 'delete'])->name('comments.delete');
-Route::get('/comments/{postId}/{commentId}', [CommentController::class, 'view'])->name('comments.view');
-Route::patch('/comments/{postId}/{commentId}', [CommentController::class, 'edit'])->name('comments.update');
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index')->middleware('auth');
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create')->middleware('auth');
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store')->middleware('auth');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware('auth');
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit')->middleware('auth');
+Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update')->middleware('auth');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
+// Route::resource('/posts', 'PostController')->middleware('auth');
 
-// Route::resource('posts', PostController::class);
+
+// Comments Routes
+Route::post('/comments/{postId}', [CommentController::class, 'create'])->name('comments.create')->middleware('auth');
+Route::delete('/comments/{postId}/{commentId}', [CommentController::class, 'delete'])->name('comments.delete')->middleware('auth');
+Route::get('/comments/{postId}/{commentId}', [CommentController::class, 'view'])->name('comments.view')->middleware('auth');
+Route::patch('/comments/{postId}/{commentId}', [CommentController::class, 'edit'])->name('comments.update')->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+
+
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $user = Socialite::driver('github')->user();
+
+    // $user->token
+});

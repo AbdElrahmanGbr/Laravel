@@ -21,7 +21,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255,unique:posts,title',
-            'description' => 'required|min:3|max:255',
+            'body' => 'required|min:3|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
